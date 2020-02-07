@@ -11,6 +11,9 @@ class Game:
         pygame.init()
         self.display = pygame.display.set_mode((self.width, self.height), pygame.HWSURFACE)
 
+    def render(self):
+    	pygame.draw.circle(self.display, 255, (0,0), 500)
+
     def run(self):
         while True:
             for event in pygame.event.get():
