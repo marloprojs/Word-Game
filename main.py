@@ -8,6 +8,7 @@ YELLOW = (252,186,3)
 PALE_YELLOW = (255,253,194)
 TURQ = (64,224,208)
 RED = (237, 39, 28)
+DARK_BLUE = (4, 47, 99)
 
 pygame.init()
 
@@ -17,16 +18,16 @@ class Game:
         self.width  = 700
         self.display = None
         self.letter_width = 50
-        self.radius = 150
+        self.radius = 140
         self.font = pygame.font.Font("freesansbold.ttf", self.letter_width)
-        self.input_font = pygame.font.Font("freesansbold.ttf", 25)
-        self.midpoint = int(self.width/2), int(self.height/2 +50)
+        self.input_font = pygame.font.Font("freesansbold.ttf", 35)
+        self.midpoint = int(self.width/3), int(self.height/2 +50)
         self.letters = ["A","B","C","D","E","F","G"]
         self.input_color = PALE_YELLOW
 
     def coordinates(self, angle):
-        y = math.cos(angle)*self.radius
-        x = math.sin(angle)*self.radius
+        y = math.cos(angle)*(self.radius-5)
+        x = math.sin(angle)*(self.radius-5)
         return (int(self.midpoint[0] + x), int(self.midpoint[1] - y))
 
     def adjust_coords(self, coords, letter):
@@ -61,6 +62,8 @@ class Game:
         rendered_input = self.input_font.render(text, True, self.input_color)
         pot_width, _ = self.input_font.size(text)
         location = self.midpoint[0] - pot_width/2
+        underline_width = max(pot_width+10, 90)
+        pygame.draw.line(self.display, PALE_YELLOW, (int(self.midpoint[0] - underline_width/2), 65), (int(self.midpoint[0] + underline_width/2), 65), 4)
         self.display.blit(rendered_input, (int(location), 30))
 
     def validate(self, text):
