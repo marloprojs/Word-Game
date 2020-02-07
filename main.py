@@ -70,10 +70,8 @@ class Game:
         self.correct_spelling = self.spell.unknown([self.text])
         if self.text not in self.spell.word_frequency:
             self.input_color = RED
-            print(":(")
             return False
         else:
-            print(":)")
             return True
 
     def run(self):
@@ -90,7 +88,6 @@ class Game:
                 elif event.type == pygame.KEYDOWN:
                     self.input_color = PALE_YELLOW
                     if event.key == pygame.K_RETURN:
-                        self.validate(self.text)
                         if self.validate(self.text) == True:
                             self.text = ""
                             
