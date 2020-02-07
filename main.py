@@ -16,15 +16,20 @@ class Game:
         self.width  = 700
         self.display = None
         self.letter_width = 50
+        self.radius = 150
         self.font = pygame.font.Font("freesansbold.ttf", self.letter_width)
         self.input_font = pygame.font.Font("freesansbold.ttf", 25)
         self.midpoint = int(self.width/2), int(self.height/2 +50)
         self.letters = ["A","B","C","D","E","F","G"]
 
-    def coordinates(self, angle, radius):
-        y = math.cos(angle)*radius
-        x = math.sin(angle)*radius
-        return (self.midpoint[0] + x - (self.letter_width/2), self.midpoint[1] - y - (self.letter_width/2))
+    def coordinates(self, angle):
+        y = math.cos(angle)*self.radius
+        x = math.sin(angle)*self.radius
+        return (int(self.midpoint[0] + x), int(self.midpoint[1] - y))
+
+    def adjust_coords(self, coords, letter):
+        real_width, _ = self.font.size(letter)
+        return (int(coords[0] - (real_width/2)), int(coords[1] - (self.letter_width/2)))
 
     def setup(self):
         self.display = pygame.display.set_mode((self.width, self.height), pygame.HWSURFACE)
@@ -32,7 +37,7 @@ class Game:
 
     def render(self):
         self.display.fill(YELLOW)
-        pygame.draw.circle(self.display, WHITE, self.midpoint, 150)
+        pygame.draw.circle(self.display, WHITE, self.midpoint, self.radius)
         self.render_letters()
         self.render_input(self.text.upper())
 
@@ -44,13 +49,17 @@ class Game:
         for li, letter in enumerate(letters):
             angle = sep_angle*li
             letter = letters[li]
-            location = self.coordinates(angle, 150)
+            lx, ly = self.coordinates(angle)
+            adj_location = self.adjust_coords((lx, ly), letter)
+            pygame.draw.circle(self.display, WHITE, (lx, ly-2), int(self.letter_width/2+8))
             rendered_letter = self.font.render(letter, True, BLACK)
-            self.display.blit(rendered_letter, location)
+            self.display.blit(rendered_letter, adj_location)
 
     def render_input(self, text):
         rendered_input = self.input_font.render(text, True, PALE_YELLOW)
-        self.display.blit(rendered_input, (15, 15))
+        pot_width, _ = self.input_font.size(text)
+        location = self.midpoint[0] - pot_width/2
+        self.display.blit(rendered_input, (int(location), 30))
 
     def run(self):
         self.text = ""
