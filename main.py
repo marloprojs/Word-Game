@@ -24,6 +24,7 @@ class Game:
         self.midpoint = int(self.width/3), int(self.height/2 +50)
         self.letters = ["A","B","C","D","E","F","G"]
         self.input_color = PALE_YELLOW
+        self.prev_letter = ""
 
     def coordinates(self, angle):
         y = math.cos(angle)*(self.radius-5)
@@ -74,6 +75,25 @@ class Game:
         else:
             return True
 
+    def is_adj(self, letter):
+        i = 0
+        for i in range(len(self.letters)):
+            cur_letter = self.letters[i]
+            print("cur_letter: \n", cur_letter)
+            print("pre letter: \n", self.prev_letter)
+            if cur_letter == letter:
+                if i != 0 and i != (len(self.letters)-1):
+                    if self.prev_letter == self.letters[i-1] or self.prev_letter == self.letters[i+1]:
+                        return True
+                elif i == 0:
+                    if self.prev_letter == self.letters[i+1]:
+                        return True
+                elif i == len(self.letters)-1:
+                    if self.prev_letter == self.letters[i-1]:
+                        return True
+        return False
+
+
     def run(self):
         self.text = ""
         self.correct_spelling = ""
@@ -90,11 +110,13 @@ class Game:
                     if event.key == pygame.K_RETURN:
                         if self.validate(self.text) == True:
                             self.text = ""
+                            self.prev_letter = ""
                             
                     elif event.key == pygame.K_BACKSPACE:
                         self.text = self.text[:-1]
-                    elif event.unicode.upper() in self.letters:
+                    elif event.unicode.upper() in self.letters and not self.is_adj(event.unicode.upper()):
                         self.text += event.unicode
+                        self.prev_letter = event.unicode.upper()
 
 
 
