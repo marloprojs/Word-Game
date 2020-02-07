@@ -12,13 +12,13 @@ pygame.init()
 
 class Game:
     def __init__(self):
-        self.height = 800
-        self.width  = 800
+        self.height = 500
+        self.width  = 700
         self.display = None
-        self.letter_width = 80
+        self.letter_width = 50
         self.font = pygame.font.Font("freesansbold.ttf", self.letter_width)
-        self.input_font = pygame.font.Font("freesansbold.ttf", 45)
-        self.midpoint = int(self.width/2), int(self.height/2 - 25)
+        self.input_font = pygame.font.Font("freesansbold.ttf", 25)
+        self.midpoint = int(self.width/2), int(self.height/2 +50)
         self.letters = ["A","B","C","D","E","F","G"]
 
     def coordinates(self, angle, radius):
@@ -33,7 +33,7 @@ class Game:
 
     def render(self):
         self.display.fill(YELLOW)
-        pygame.draw.circle(self.display, WHITE, self.midpoint, 250)
+        pygame.draw.circle(self.display, WHITE, self.midpoint, 150)
         self.render_letters()
         self.render_input(self.text.upper())
 
@@ -45,7 +45,7 @@ class Game:
         for li, letter in enumerate(letters):
             angle = sep_angle*li
             letter = letters[li]
-            location = self.coordinates(angle, 250)
+            location = self.coordinates(angle, 150)
             rendered_letter = self.font.render(letter, True, BLACK)
             self.display.blit(rendered_letter, location)
 
