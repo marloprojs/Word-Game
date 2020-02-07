@@ -1,6 +1,7 @@
 import pygame
 from spellchecker import SpellChecker
 import math
+import numpy as np
 
 BLACK = (0,0,0)
 WHITE = (255,255,255)
@@ -24,6 +25,32 @@ class Game:
         self.guess_pts = 20
         self.guess_font = pygame.font.Font("freesansbold.ttf", self.guess_pts)
         self.midpoint = int(self.width/3), int(self.height/2 +50)
+        self.letter_freqs =    {'E': 21912,
+                                'T': 16587,
+                                'A': 14810,
+                                'O': 14003,
+                                'I': 13318,
+                                'N': 12666,
+                                'S': 11450,
+                                'R': 10977,
+                                'H': 10795,
+                                'D': 7874,
+                                'L': 7253,
+                                'U': 5246,
+                                'C': 4943,
+                                'M': 4761,
+                                'F': 4200,
+                                'Y': 3853,
+                                'W': 3819,
+                                'G': 3693,
+                                'P': 3316,
+                                'B': 2715,
+                                'V': 2019,
+                                'K': 1257,
+                                'X': 315,
+                                'Q': 205,
+                                'J': 188,
+                                'Z': 128}
         self.letters = ["A","B","C","D","E","F","G"]
         self.letters_pos = []
         self.input_color = PALE_YELLOW
@@ -38,7 +65,12 @@ class Game:
     def adjust_coords(self, coords, letter):
         real_width, _ = self.font.size(letter)
         return (int(coords[0] - (real_width/2)), int(coords[1] - (self.letter_width/2)))
-
+    
+    def generate_letters(self):
+        pot_letters, freqs = zip(*self.letter_freqs.items())
+        normal_freqs = np.array(freqs)/np.sum(np.array(freqs))
+        self.letters = list(np.random.choice(pot_letters,p=normal_freqs,replace=False,size=9))
+        
     def setup(self):
         self.display = pygame.display.set_mode((self.width, self.height), pygame.HWSURFACE)
         pygame.display.set_caption("Super Freq")
@@ -127,6 +159,7 @@ class Game:
         self.text = ""
         self.correct_spelling = ""
         self.spell = SpellChecker()
+        self.generate_letters()
         while True:
             self.render()
             pygame.display.flip()
