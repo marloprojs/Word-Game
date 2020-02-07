@@ -25,6 +25,7 @@ class Game:
         self.guess_font = pygame.font.Font("freesansbold.ttf", self.guess_pts)
         self.midpoint = int(self.width/3), int(self.height/2 +50)
         self.letters = ["A","B","C","D","E","F","G"]
+        self.letters_pos = []
         self.input_color = PALE_YELLOW
         self.guess_color = WHITE
         self.real_guesses = []
@@ -45,6 +46,7 @@ class Game:
     def render(self):
         self.display.fill(YELLOW)
         pygame.draw.circle(self.display, WHITE, self.midpoint, self.radius)
+        self.render_line()
         self.render_letters()
         self.render_input(self.text.upper())
         self.render_successes()
@@ -58,10 +60,27 @@ class Game:
             angle = sep_angle*li
             letter = letters[li]
             lx, ly = self.coordinates(angle)
+            self.letters_pos.append((lx, ly))
             adj_location = self.adjust_coords((lx, ly), letter)
             pygame.draw.circle(self.display, WHITE, (lx, ly-2), int(self.letter_width/2+8))
             rendered_letter = self.font.render(letter, True, BLACK)
             self.display.blit(rendered_letter, adj_location)
+
+    def find_letter(self, letter):
+        i = 0
+        for i in range(len(self.letters)):
+            if self.letters[i].upper() == letter.upper():
+                return i 
+        return None      
+
+    def render_line(self):
+        if len(self.text) > 1:
+            for i in range(1,len(self.text)):
+                letter1 = self.text[i-1]
+                letter2 = self.text[i]
+                point1 = self.letters_pos[self.find_letter(letter1)]
+                point2 = self.letters_pos[self.find_letter(letter2)]
+                pygame.draw.line(self.display, TURQ, point1, point2, 5)
 
     def render_input(self, text):
         rendered_input = self.input_font.render(text, True, self.input_color)
