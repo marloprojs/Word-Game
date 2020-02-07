@@ -1,5 +1,5 @@
 import pygame
-import hunspell
+from spellchecker import SpellChecker
 import math
 
 BLACK = (0,0,0)
@@ -54,6 +54,8 @@ class Game:
 
     def run(self):
         self.text = ""
+        self.correct_spelling = ""
+        self.spell = SpellChecker()
         while True:
             self.render()
             pygame.display.flip()
@@ -69,6 +71,8 @@ class Game:
                         self.text = self.text[:-1]
                     else:
                         self.text += event.unicode
+                        self.correct_spelling = spell.correction(self.text)
+                        if(spell.unknown(self.text))
 
 
 
