@@ -21,9 +21,13 @@ class Game:
         self.radius = 140
         self.font = pygame.font.Font("freesansbold.ttf", self.letter_width)
         self.input_font = pygame.font.Font("freesansbold.ttf", 35)
+        self.guess_pts = 20
+        self.guess_font = pygame.font.Font("freesansbold.ttf", self.guess_pts)
         self.midpoint = int(self.width/3), int(self.height/2 +50)
         self.letters = ["A","B","C","D","E","F","G"]
         self.input_color = PALE_YELLOW
+        self.guess_color = WHITE
+        self.real_guesses = []
 
     def coordinates(self, angle):
         y = math.cos(angle)*(self.radius-5)
@@ -36,13 +40,14 @@ class Game:
 
     def setup(self):
         self.display = pygame.display.set_mode((self.width, self.height), pygame.HWSURFACE)
-        pygame.display.set_caption("T9 Proj")
+        pygame.display.set_caption("Super Freq")
 
     def render(self):
         self.display.fill(YELLOW)
         pygame.draw.circle(self.display, WHITE, self.midpoint, self.radius)
         self.render_letters()
         self.render_input(self.text.upper())
+        self.render_successes()
 
     def render_letters(self, letters = None):
         if letters == None:
@@ -70,13 +75,24 @@ class Game:
             pygame.draw.line(self.display, PALE_YELLOW, (int(self.midpoint[0] - underline_width/2), 65), (int(self.midpoint[0]  + 350/2+5), 65), 4)
             self.display.blit(rendered_input, (int(self.midpoint[0] + 350/2 - pot_width), 30))
 
+    def render_successes(self):
+        for gi, guess in enumerate(self.real_guesses):
+            loc = int(2*self.width/3), int((gi * self.guess_pts) + 80)
+            text = self.guess_font.render(guess, True, self.guess_color)
+            self.display.blit(text, loc)
+
     def validate(self, text):
         self.correct_spelling = self.spell.unknown([self.text])
         if self.text not in self.spell.word_frequency:
             self.input_color = RED
             return False
         else:
+            self.add_correct_word(text)
             return True
+
+    def add_correct_word(self, text):
+        self.real_guesses.append(text.upper())
+        self.real_guesses.sort()
 
     def run(self):
         self.text = ""
@@ -99,8 +115,6 @@ class Game:
                         self.text = self.text[:-1]
                     elif event.unicode.upper() in self.letters:
                         self.text += event.unicode
-
-
 
 if __name__ == "__main__":
     G = Game()
