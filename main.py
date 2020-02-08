@@ -61,8 +61,12 @@ class Game:
         pot_width, _ = self.input_font.size(text)
         location = self.midpoint[0] - pot_width/2
         underline_width = max(pot_width+10, 90)
-        pygame.draw.line(self.display, PALE_YELLOW, (int(self.midpoint[0] - underline_width/2), 65), (int(self.midpoint[0] + underline_width/2), 65), 4)
-        self.display.blit(rendered_input, (int(location), 30))
+        if pot_width < 350:
+            pygame.draw.line(self.display, PALE_YELLOW, (int(self.midpoint[0] - underline_width/2), 65), (int(self.midpoint[0] + underline_width/2), 65), 4)
+            self.display.blit(rendered_input, (int(location), 30))
+        else:
+            pygame.draw.line(self.display, PALE_YELLOW, (int(self.midpoint[0] - underline_width/2), 65), (int(self.midpoint[0] + underline_width/2), 65), 4)
+            self.display.blit(rendered_input, (int(self.midpoint[0] + 350 - pot_width), 30))
 
     def run(self):
         self.text = ""
