@@ -71,8 +71,8 @@ class Game:
             self.display.blit(rendered_input, (int(self.midpoint[0] + 350/2 - pot_width), 30))
 
     def validate(self, text):
-        self.correct_spelling = self.spell.correction(self.text)
-        if self.correct_spelling != self.text:
+        self.correct_spelling = self.spell.unknown([self.text])
+        if self.text not in self.spell.word_frequency:
             self.input_color = RED
             print(":(")
             return False
@@ -100,7 +100,7 @@ class Game:
 
                     elif event.key == pygame.K_BACKSPACE:
                         self.text = self.text[:-1]
-                    else:
+                    elif event.unicode.upper() in self.letters:
                         self.text += event.unicode
 
 
