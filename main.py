@@ -22,10 +22,11 @@ class Game:
         self.midpoint = int(self.width/2), int(self.height/2 +50)
         self.letters = ["A","B","C","D","E","F","G"]
 
-    def coordinates(self, angle, radius):
-        y = math.cos(angle)*radius
-        x = math.sin(angle)*radius
-        return (int(self.midpoint[0] + x - (self.letter_width/2)), int(self.midpoint[1] - y - (self.letter_width/2)))
+    def coordinates(self, angle, letter):
+        y = math.cos(angle)*self.radius
+        x = math.sin(angle)*self.radius
+        real_width, _ = self.font.size(letter)
+        return (int(self.midpoint[0] + x - (real_width/2)), int(self.midpoint[1] - y - (self.letter_width/2)))
 
     def setup(self):
         self.display = pygame.display.set_mode((self.width, self.height), pygame.HWSURFACE)
@@ -45,8 +46,7 @@ class Game:
         for li, letter in enumerate(letters):
             angle = sep_angle*li
             letter = letters[li]
-            render_size = self.font.size(letter)
-            lx, ly = self.coordinates(angle, self.radius)
+            lx, ly = self.coordinates(angle, letter)
             rendered_letter = self.font.render(letter, True, BLACK)
             self.display.blit(rendered_letter, (lx, ly))
 
@@ -54,7 +54,7 @@ class Game:
         rendered_input = self.input_font.render(text, True, PALE_YELLOW)
         pot_width, _ = self.input_font.size(text)
         location = self.midpoint[0] - pot_width/2
-        self.display.blit(rendered_input, (int(location), 15))
+        self.display.blit(rendered_input, (int(location), 30))
 
     def run(self):
         self.text = ""
