@@ -16,6 +16,7 @@ class Game:
         self.width  = 800
         self.display = None
         self.letter_width = 80
+        self.radius = 150
         self.font = pygame.font.Font("freesansbold.ttf", self.letter_width)
         self.input_font = pygame.font.Font("freesansbold.ttf", 45)
         self.midpoint = int(self.width/2), int(self.height/2 - 25)
@@ -24,7 +25,7 @@ class Game:
     def coordinates(self, angle, radius):
         y = math.cos(angle)*radius
         x = math.sin(angle)*radius
-        return (self.midpoint[0] + x - (self.letter_width/2), self.midpoint[1] - y - (self.letter_width/2))
+        return (int(self.midpoint[0] + x - (self.letter_width/2)), int(self.midpoint[1] - y - (self.letter_width/2)))
 
     def setup(self):
         self.display = pygame.display.set_mode((self.width, self.height), pygame.HWSURFACE)
@@ -44,13 +45,16 @@ class Game:
         for li, letter in enumerate(letters):
             angle = sep_angle*li
             letter = letters[li]
-            location = self.coordinates(angle, 250)
+            render_size = self.font.size(letter)
+            lx, ly = self.coordinates(angle, 250)
             rendered_letter = self.font.render(letter, True, BLACK)
-            self.display.blit(rendered_letter, location)
+            self.display.blit(rendered_letter, (lx, ly))
 
     def render_input(self, text):
         rendered_input = self.input_font.render(text, True, PALE_YELLOW)
-        self.display.blit(rendered_input, (15, 15))
+        pot_width, _ = self.input_font.size(text)
+        location = self.midpoint[0] - pot_width/2
+        self.display.blit(rendered_input, (int(location), 15))
 
     def run(self):
         self.text = ""
