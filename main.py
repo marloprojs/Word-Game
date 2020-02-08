@@ -45,12 +45,8 @@ class Game:
         for li, letter in enumerate(letters):
             angle = sep_angle*li
             letter = letters[li]
-<<<<<<< HEAD
             render_size = self.font.size(letter)
-            lx, ly = self.coordinates(angle, 250)
-=======
-            location = self.coordinates(angle, 150)
->>>>>>> 331c25ce1afc66d82f7073153b9c1f1eef69b286
+            lx, ly = self.coordinates(angle, self.radius)
             rendered_letter = self.font.render(letter, True, BLACK)
             self.display.blit(rendered_letter, (lx, ly))
 
