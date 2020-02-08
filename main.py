@@ -26,7 +26,6 @@ class Game:
         self.midpoint = int(self.width/3), int(self.height/2 +50)
         self.letters = ["A","B","C","D","E","F","G"]
         self.input_color = PALE_YELLOW
-        self.prev_letter = ""
         self.guess_color = WHITE
         self.real_guesses = []
 
@@ -84,7 +83,7 @@ class Game:
 
     def validate(self, text):
         self.correct_spelling = self.spell.unknown([self.text])
-        if self.text not in self.spell.word_frequency:
+        if self.text not in self.spell.word_frequency or len(self.text) < 4:
             self.input_color = RED
             return False
         else:
@@ -92,21 +91,13 @@ class Game:
             return True
 
     def is_adj(self, letter):
-        i = 0
-        for i in range(len(self.letters)):
-            cur_letter = self.letters[i]
-            print("cur_letter: \n", cur_letter)
-            print("pre letter: \n", self.prev_letter)
-            if cur_letter == letter:
-                if i != 0 and i != (len(self.letters)-1):
-                    if self.prev_letter == self.letters[i-1] or self.prev_letter == self.letters[i+1]:
-                        return True
-                elif i == 0:
-                    if self.prev_letter == self.letters[i+1]:
-                        return True
-                elif i == len(self.letters)-1:
-                    if self.prev_letter == self.letters[i-1]:
-                        return True
+        if len(self.text) == 0:
+            return False
+        prev_letter = self.text[-1].upper()
+        next_i = self.letters.index(letter)
+        prev_i = self.letters.index(prev_letter)
+        if abs(next_i - prev_i) == 1 or abs(next_i - prev_i) == len(self.letters) - 1:
+            return True
         return False
 
     def add_correct_word(self, text):
@@ -129,13 +120,11 @@ class Game:
                     if event.key == pygame.K_RETURN:
                         if self.validate(self.text) == True:
                             self.text = ""
-                            self.prev_letter = ""
                             
                     elif event.key == pygame.K_BACKSPACE:
                         self.text = self.text[:-1]
                     elif event.unicode.upper() in self.letters and not self.is_adj(event.unicode.upper()):
                         self.text += event.unicode
-                        self.prev_letter = event.unicode.upper()
 
 if __name__ == "__main__":
     G = Game()
