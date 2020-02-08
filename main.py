@@ -26,7 +26,6 @@ class Game:
         x = math.sin(angle)*radius
         return (self.midpoint[0] + x - (self.letter_width/2), self.midpoint[1] - y - (self.letter_width/2))
 
-
     def setup(self):
         self.display = pygame.display.set_mode((self.width, self.height), pygame.HWSURFACE)
         pygame.display.set_caption("T9 Proj")
@@ -51,7 +50,7 @@ class Game:
 
     def render_input(self, text):
         rendered_input = self.input_font.render(text, True, PALE_YELLOW)
-        self.display.blit(rendered_input, (15, 15))        
+        self.display.blit(rendered_input, (15, 15))
 
     def run(self):
         self.text = ""
