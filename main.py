@@ -67,7 +67,7 @@ class Game:
             pygame.draw.line(self.display, PALE_YELLOW, (int(self.midpoint[0] - underline_width/2), 65), (int(self.midpoint[0] + underline_width/2), 65), 4)
             self.display.blit(rendered_input, (int(location), 30))
         else:
-            pygame.draw.line(self.display, PALE_YELLOW, (int(self.midpoint[0] - underline_width/2), 65), (int(self.midpoint[0]  + 350/2+10), 65), 4)
+            pygame.draw.line(self.display, PALE_YELLOW, (int(self.midpoint[0] - underline_width/2), 65), (int(self.midpoint[0]  + 350/2+5), 65), 4)
             self.display.blit(rendered_input, (int(self.midpoint[0] + 350/2 - pot_width), 30))
 
     def validate(self, text):
