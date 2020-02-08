@@ -17,10 +17,10 @@ class Game:
         self.width  = 700
         self.display = None
         self.letter_width = 50
-        self.radius = 150
+        self.radius = 140
         self.font = pygame.font.Font("freesansbold.ttf", self.letter_width)
         self.input_font = pygame.font.Font("freesansbold.ttf", 35)
-        self.midpoint = int(self.width/2), int(self.height/2 +50)
+        self.midpoint = int(self.width/3), int(self.height/2 +50)
         self.letters = ["A","B","C","D","E","F","G"]
 
     def coordinates(self, angle):
