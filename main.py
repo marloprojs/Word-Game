@@ -3,18 +3,20 @@ import hunspell
 import math
 
 BLACK = (0,0,0)
+WHITE = (255,255,255)
+
+pygame.init()
 
 class Game:
     def __init__(self):
         self.height = 600
         self.width  = 800
         self.display = None
-        self.font = pygame.font("freesansbold.ttf", 32)
+        self.font = pygame.font.Font("freesansbold.ttf", 32)
 
     def setup(self):
-        pygame.init()
         self.display = pygame.display.set_mode((self.width, self.height), pygame.HWSURFACE)
-
+        pygame.display.set_caption("T9 Proj")
 
     def render(self):
     	pygame.draw.circle(self.display, 255, (0,0), 500)
@@ -29,9 +31,12 @@ class Game:
 
     def run(self):
         while True:
+            self.render()
+            pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                    quit()
 
 if __name__ == "__main__":
     G = Game()
