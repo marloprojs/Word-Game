@@ -1,5 +1,5 @@
 import pygame
-import hunspell
+from spellchecker import SpellChecker
 import math
 
 BLACK = (0,0,0)
@@ -7,6 +7,7 @@ WHITE = (255,255,255)
 YELLOW = (252,186,3)
 PALE_YELLOW = (255,253,194)
 TURQ = (64,224,208)
+RED = (237, 39, 28)
 DARK_BLUE = (4, 47, 99)
 
 pygame.init()
@@ -22,6 +23,7 @@ class Game:
         self.input_font = pygame.font.Font("freesansbold.ttf", 35)
         self.midpoint = int(self.width/3), int(self.height/2 +50)
         self.letters = ["A","B","C","D","E","F","G"]
+        self.input_color = PALE_YELLOW
 
     def coordinates(self, angle):
         y = math.cos(angle)*(self.radius-5)
@@ -57,7 +59,7 @@ class Game:
             self.display.blit(rendered_letter, adj_location)
 
     def render_input(self, text):
-        rendered_input = self.input_font.render(text, True, PALE_YELLOW)
+        rendered_input = self.input_font.render(text, True, self.input_color)
         pot_width, _ = self.input_font.size(text)
         location = self.midpoint[0] - pot_width/2
         underline_width = max(pot_width+10, 90)
@@ -68,8 +70,20 @@ class Game:
             pygame.draw.line(self.display, PALE_YELLOW, (int(self.midpoint[0] - underline_width/2), 65), (int(self.midpoint[0] + underline_width/2), 65), 4)
             self.display.blit(rendered_input, (int(self.midpoint[0] + 350 - pot_width), 30))
 
+    def validate(self, text):
+        self.correct_spelling = self.spell.correction(self.text)
+        if self.correct_spelling != self.text:
+            self.input_color = RED
+            print(":(")
+            return False
+        else:
+            print(":)")
+            return True
+
     def run(self):
         self.text = ""
+        self.correct_spelling = ""
+        self.spell = SpellChecker()
         while True:
             self.render()
             pygame.display.flip()
@@ -78,9 +92,12 @@ class Game:
                     pygame.quit()
                     quit()
                 elif event.type == pygame.KEYDOWN:
-
+                    self.input_color = PALE_YELLOW
                     if event.key == pygame.K_RETURN:
-                        self.text = ''
+                        self.validate(self.text)
+                        if self.validate(self.text) == True:
+                            self.text = ""
+                            
                     elif event.key == pygame.K_BACKSPACE:
                         self.text = self.text[:-1]
                     else:
