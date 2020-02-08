@@ -33,7 +33,7 @@ class Game:
 
     def render(self):
         self.display.fill(YELLOW)
-        pygame.draw.circle(self.display, WHITE, self.midpoint, 150)
+        pygame.draw.circle(self.display, WHITE, self.midpoint, self.radius)
         self.render_letters()
         self.render_input(self.text.upper())
 
